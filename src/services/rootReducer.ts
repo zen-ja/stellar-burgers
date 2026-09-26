@@ -1,36 +1,47 @@
-import { getIngredientsApi } from "@/utils/burger-api";
-import type { TIngredient } from "@/utils/types";
+import { getFeedsApi, getIngredientsApi } from "@/utils/burger-api";
+import type { TIngredient, TOrder } from "@/utils/types";
 import { combineReducers, createAsyncThunk, createSlice, type SerializedError } from "@reduxjs/toolkit";
-
-// TODO: Заменить на настоящий корневой редьюсер
-export const rootReducer_ = (): Record<string, never> => ({
-  // TODO: Собрать здесь редьюсеры слайсов
-});
 
 export interface AppState {
   isInit: boolean;
   isLoading: boolean;
-  ingredients: TIngredient[] ;
-  error: SerializedError | null ;
+  ingredients: TIngredient[];
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+  error: SerializedError | null;
 }
 
 export const getIngredientsThunk = createAsyncThunk(
   'ingredients/getIngredients',
   () =>
     getIngredientsApi(),
-)
+);
 
+export const getFeedsApiThunk = createAsyncThunk(
+  'ingredients/getFeeds',
+  () =>
+    getFeedsApi(),
+)
 
 const initialState: AppState = {
   isInit: false,
   isLoading: false,
   ingredients: [],
+  orders: [],
+  total: 0,
+  totalToday: 0,
   error: null
 }
+
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {},
+  reducers: {
+    // getIngredient: (id:number) =>{
+
+    // }
+  },
   extraReducers: (builder) => {
     builder.addCase(getIngredientsThunk.pending, (state) => {
       state.isLoading = true;
@@ -44,6 +55,21 @@ export const ingredientsSlice = createSlice({
       state.isInit = true;
       state.isLoading = false;
       state.ingredients = payload;
+    });
+
+    builder.addCase(getFeedsApiThunk.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getFeedsApiThunk.rejected, (state) => {
+      state.isInit = true;
+      state.isLoading = false;
+      state.error = state.error;
+    });
+    builder.addCase(getFeedsApiThunk.fulfilled, (state, { payload }) => {
+      state
+      state.orders = payload.orders;
+      state.total = payload.total;
+      state.totalToday = payload.totalToday;
     });
   },
 })
