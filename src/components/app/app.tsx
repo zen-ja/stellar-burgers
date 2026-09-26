@@ -11,7 +11,7 @@ import {
   ResetPassword,
 } from '@pages';
 import { Preloader } from '@ui';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import type { AppContentProps } from './type';
 // import type { TIngredient } from '@utils-types';
@@ -32,10 +32,10 @@ const App = (): React.JSX.Element => {
     error: ingredientsError,
   } = useSelector((store: RootState) => store.ingredients);
 
-  useEffect(()=>{
-  if (!isInit)
-    dispatch(getIngredientsThunk());
+  useEffect(() => {
+    if (!isInit) dispatch(getIngredientsThunk());
   }, [dispatch, isInit]);
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -80,6 +80,10 @@ const AppContent = ({
 };
 
 const RouteComponent = (): React.JSX.Element => {
+  const navigate = useNavigate();
+  const closeModal = (): void => {
+    navigate(-1);
+  };
   return (
     <Routes>
       <Route path="/" element={<ConstructorPage />} />
@@ -101,7 +105,7 @@ const RouteComponent = (): React.JSX.Element => {
       <Route
         path="/ingredients/:id"
         element={
-          <Modal title="oo" onClose={() => {}}>
+          <Modal title="Детали ингредиента" onClose={closeModal}>
             <IngredientDetails />
           </Modal>
         }
