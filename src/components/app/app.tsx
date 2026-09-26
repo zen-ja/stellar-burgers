@@ -1,20 +1,41 @@
-import { AppHeader } from '@components';
-import { ConstructorPage } from '@pages';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import {
+  ConstructorPage,
+  Feed,
+  ForgotPassword,
+  Login,
+  NotFound404,
+  Profile,
+  ProfileOrders,
+  Register,
+  ResetPassword,
+} from '@pages';
 import { Preloader } from '@ui';
 import { Routes, Route } from 'react-router-dom';
 
 import type { AppContentProps } from './type';
-import type { TIngredient } from '@utils-types';
+// import type { TIngredient } from '@utils-types';
 
 import '../../index.css';
 
 import styles from './app.module.css';
+import { useSelector, type RootState, useDispatch } from '@/services/store';
+import { getIngredientsThunk } from '@/services/rootReducer';
+import { useEffect } from 'react';
 
 const App = (): React.JSX.Element => {
-  const ingredients: TIngredient[] = [];
-  const isIngredientsLoading = false;
-  const ingredientsError = null;
+  const dispatch = useDispatch();
+  const {
+    isInit,
+    isLoading: isIngredientsLoading,
+    ingredients,
+    error: ingredientsError,
+  } = useSelector((store: RootState) => store.ingredients);
 
+  useEffect(()=>{
+  if (!isInit)
+    dispatch(getIngredientsThunk());
+  }, [dispatch, isInit]);
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -60,10 +81,40 @@ const AppContent = ({
 
 const RouteComponent = (): React.JSX.Element => {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<ConstructorPage />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<ConstructorPage />} />
+      <Route path="/feed" element={<Feed />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/orders" element={<ProfileOrders />} />
+      <Route
+        path="/feed/:number"
+        element={
+          <Modal title="oo" onClose={() => {}}>
+            <OrderInfo />
+          </Modal>
+        }
+      />
+      <Route
+        path="/ingredients/:id"
+        element={
+          <Modal title="oo" onClose={() => {}}>
+            <IngredientDetails />
+          </Modal>
+        }
+      />
+      <Route
+        path="/profile/orders/:number"
+        element={
+          <Modal title="oo" onClose={() => {}}>
+            <OrderInfo />
+          </Modal>
+        }
+      />
+      <Route path="*" element={<NotFound404 />} />
+    </Routes>
   );
 };
