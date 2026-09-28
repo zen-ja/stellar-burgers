@@ -1,3 +1,5 @@
+import { getIngredientsThunk } from '@/services/rootReducer';
+import { useSelector, type RootState, useDispatch } from '@/services/store';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   ConstructorPage,
@@ -11,17 +13,15 @@ import {
   ResetPassword,
 } from '@pages';
 import { Preloader } from '@ui';
+// import type { TIngredient } from '@utils-types';
+import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import type { AppContentProps } from './type';
-// import type { TIngredient } from '@utils-types';
 
 import '../../index.css';
 
 import styles from './app.module.css';
-import { useSelector, type RootState, useDispatch } from '@/services/store';
-import { getIngredientsThunk } from '@/services/rootReducer';
-import { useEffect } from 'react';
 
 const App = (): React.JSX.Element => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const App = (): React.JSX.Element => {
   } = useSelector((store: RootState) => store.ingredients);
 
   useEffect(() => {
-    if (!isInit) dispatch(getIngredientsThunk());
+    if (!isInit) void dispatch(getIngredientsThunk());
   }, [dispatch, isInit]);
 
   return (
@@ -82,7 +82,7 @@ const AppContent = ({
 const RouteComponent = (): React.JSX.Element => {
   const navigate = useNavigate();
   const closeModal = (): void => {
-    navigate(-1);
+    void navigate(-1);
   };
   return (
     <Routes>
@@ -97,7 +97,7 @@ const RouteComponent = (): React.JSX.Element => {
       <Route
         path="/feed/:number"
         element={
-          <Modal title="oo" onClose={() => {}}>
+          <Modal title="oo" onClose={closeModal}>
             <OrderInfo />
           </Modal>
         }
@@ -113,7 +113,7 @@ const RouteComponent = (): React.JSX.Element => {
       <Route
         path="/profile/orders/:number"
         element={
-          <Modal title="oo" onClose={() => {}}>
+          <Modal title="oo" onClose={closeModal}>
             <OrderInfo />
           </Modal>
         }
