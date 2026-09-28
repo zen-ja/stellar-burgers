@@ -3,7 +3,7 @@ import { Preloader, IngredientDetailsUI } from '@ui';
 import { useParams } from 'react-router-dom';
 
 export const IngredientDetails = (): React.JSX.Element => {
-  // TODO: Взять переменную из стора
+  // TODO: +Взять переменную из стора
   const { ingredients } = useSelector((store: RootState) => store.ingredients);
   const { id } = useParams();
   console.log(id);

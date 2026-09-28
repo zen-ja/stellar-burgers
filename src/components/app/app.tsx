@@ -33,7 +33,9 @@ const App = (): React.JSX.Element => {
   } = useSelector((store: RootState) => store.ingredients);
 
   useEffect(() => {
-    if (!isInit) void dispatch(getIngredientsThunk());
+    if (!isInit) {
+      void dispatch(getIngredientsThunk());
+    }
   }, [dispatch, isInit]);
 
   return (
