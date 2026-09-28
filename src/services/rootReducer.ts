@@ -7,7 +7,13 @@ import {
   type SerializedError,
 } from '@reduxjs/toolkit';
 
-import type { TConstructorState, TIngredient, TOrder, TUser } from '@/utils/types';
+import type {
+  TConstructorIngredient,
+  TConstructorState,
+  TIngredient,
+  TOrder,
+  TUser,
+} from '@/utils/types';
 
 export type AppState = {
   isInit: boolean;
@@ -53,11 +59,13 @@ export const ingredientsSlice = createSlice({
       if (payload.type === 'bun') {
         state.constructorItems.bun = { id: payload._id, ...payload };
       } else {
-        state.constructorItems.ingredients.push({
-          id: crypto.randomUUID(),
-          ...payload,
-        });
+        state.constructorItems.ingredients.push({ id: crypto.randomUUID(), ...payload });
       }
+    },
+    removeInggredient: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
+      state.constructorItems.ingredients = state.constructorItems.ingredients.filter(
+        (i) => i.id !== payload.id
+      );
     },
   },
   extraReducers: (builder) => {
@@ -110,4 +118,4 @@ export const rootReducer = combineReducers({
   secure: secureSlice.reducer,
 });
 
-export const { addIngredient } = ingredientsSlice.actions;
+export const { addIngredient, removeInggredient } = ingredientsSlice.actions;
