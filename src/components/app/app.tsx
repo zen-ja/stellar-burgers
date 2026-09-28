@@ -1,6 +1,12 @@
 import { getIngredientsThunk } from '@/services/rootReducer';
 import { useSelector, type RootState, useDispatch } from '@/services/store';
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import {
+  AppHeader,
+  IngredientDetails,
+  Modal,
+  OrderInfo,
+  ProtectedRoute,
+} from '@components';
 import {
   ConstructorPage,
   Feed,
@@ -15,8 +21,15 @@ import {
 import { Preloader } from '@ui';
 // import type { TIngredient } from '@utils-types';
 import { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  type Location,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
+//import { ProtectedRoute } from '@components';
 import type { AppContentProps } from './type';
 
 import '../../index.css';
@@ -81,27 +94,83 @@ const AppContent = ({
   return <RouteComponent />;
 };
 
+type TLocationState = {
+  background?: Location;
+};
+
 const RouteComponent = (): React.JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const background = (location.state as TLocationState | null)?.background;
   const closeModal = (): void => {
     void navigate(-1);
   };
   return (
     <>
-      <Routes>
+      <Routes location={background ?? location}>
         <Route path="/" element={<ConstructorPage />} />
         <Route path="/feed" element={<Feed />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/orders" element={<ProfileOrders />} />
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <ProtectedRoute>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/orders"
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/feed/:number" element={<Feed />} />
-        <Route path="/ingredients/:id" element={<ConstructorPage />} />
-        <Route path="/profile/orders/:number" element={<ProfileOrders />} />
+        <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        <Route
+          path="/profile/orders/:number"
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
+
       <Routes>
         <Route
           path="/feed/:number"
@@ -111,20 +180,24 @@ const RouteComponent = (): React.JSX.Element => {
             </Modal>
           }
         />
-        <Route
-          path="/ingredients/:id"
-          element={
-            <Modal title="Детали ингредиента" onClose={closeModal}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
+        {background && (
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal title="Детали ингредиента" onClose={closeModal}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        )}
         <Route
           path="/profile/orders/:number"
           element={
-            <Modal title="oo" onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
+            <ProtectedRoute>
+              <Modal title="oo" onClose={closeModal}>
+                <OrderInfo />
+              </Modal>
+            </ProtectedRoute>
           }
         />
       </Routes>
