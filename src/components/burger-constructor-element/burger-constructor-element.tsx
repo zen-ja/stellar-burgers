@@ -1,4 +1,4 @@
-import { removeInggredient } from '@/services/rootReducer';
+import { removeIngredient, upIngredient, downIngredient } from '@/services/rootReducer';
 import { useDispatch } from '@/services/store';
 import { BurgerConstructorElementUI } from '@ui';
 import { memo } from 'react';
@@ -12,16 +12,18 @@ export const BurgerConstructorElement = memo(function BurgerConstructorElement({
 }: BurgerConstructorElementProps): React.JSX.Element {
   const dispatch = useDispatch();
   const handleMoveDown = (): void => {
-    // TODO
+    // TODO: +
+    dispatch(downIngredient(ingredient));
   };
 
   const handleMoveUp = (): void => {
-    // TODO
+    // TODO: +
+    dispatch(upIngredient(ingredient));
   };
 
   const handleClose = (): void => {
-    // TODO
-    dispatch(removeInggredient(ingredient));
+    // TODO: +
+    dispatch(removeIngredient(ingredient));
   };
 
   return (

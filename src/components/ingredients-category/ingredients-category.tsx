@@ -11,14 +11,14 @@ export const IngredientsCategory = ({
   ingredients,
   ref,
 }: TIngredientsCategoryProps): React.JSX.Element => {
-  // TODO: Взять переменную из стора
+  // TODO: +Взять переменную из стора
   // const burgerConstructor: TConstructorState = {
   //   bun: null,
   //   ingredients: [],
   // };
 
   const { constructorItems: burgerConstructor } = useSelector(
-    (store: RootState) => store.ingredients
+    (store: RootState) => store.burgerConstructor
   );
 
   const ingredientsCounters = useMemo(() => {
