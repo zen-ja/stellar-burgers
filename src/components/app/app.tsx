@@ -87,40 +87,47 @@ const RouteComponent = (): React.JSX.Element => {
     void navigate(-1);
   };
   return (
-    <Routes>
-      <Route path="/" element={<ConstructorPage />} />
-      <Route path="/feed" element={<Feed />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/profile/orders" element={<ProfileOrders />} />
-      <Route
-        path="/feed/:number"
-        element={
-          <Modal title="oo" onClose={closeModal}>
-            <OrderInfo />
-          </Modal>
-        }
-      />
-      <Route
-        path="/ingredients/:id"
-        element={
-          <Modal title="Детали ингредиента" onClose={closeModal}>
-            <IngredientDetails />
-          </Modal>
-        }
-      />
-      <Route
-        path="/profile/orders/:number"
-        element={
-          <Modal title="oo" onClose={closeModal}>
-            <OrderInfo />
-          </Modal>
-        }
-      />
-      <Route path="*" element={<NotFound404 />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<ConstructorPage />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/orders" element={<ProfileOrders />} />
+        <Route path="/feed/:number" element={<Feed />} />
+        <Route path="/ingredients/:id" element={<ConstructorPage />} />
+        <Route path="/profile/orders/:number" element={<ProfileOrders />} />
+        <Route path="*" element={<NotFound404 />} />
+      </Routes>
+      <Routes>
+        <Route
+          path="/feed/:number"
+          element={
+            <Modal title="oo" onClose={closeModal}>
+              <OrderInfo />
+            </Modal>
+          }
+        />
+        <Route
+          path="/ingredients/:id"
+          element={
+            <Modal title="Детали ингредиента" onClose={closeModal}>
+              <IngredientDetails />
+            </Modal>
+          }
+        />
+        <Route
+          path="/profile/orders/:number"
+          element={
+            <Modal title="oo" onClose={closeModal}>
+              <OrderInfo />
+            </Modal>
+          }
+        />
+      </Routes>
+    </>
   );
 };
