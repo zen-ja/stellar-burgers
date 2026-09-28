@@ -1,4 +1,4 @@
-import { getFeedsApi, getIngredientsApi } from '@/utils/burger-api';
+import { getFeedsApi, getIngredientsApi, orderBurgerApi } from '@/utils/burger-api';
 import {
   combineReducers,
   createAsyncThunk,
@@ -16,13 +16,10 @@ import type {
 } from '@/utils/types';
 
 //#region Ingredients
-export type AppState = {
+export type IngredientsState = {
   isInit: boolean;
   isLoading: boolean;
   ingredients: TIngredient[];
-  orders: TOrder[];
-  total: number;
-  totalToday: number;
   error: SerializedError | null;
 };
 
@@ -30,23 +27,16 @@ export const getIngredientsThunk = createAsyncThunk('ingredients/getIngredients'
   getIngredientsApi()
 );
 
-export const getFeedsApiThunk = createAsyncThunk('ingredients/getFeeds', () =>
-  getFeedsApi()
-);
-
-const initialAppState: AppState = {
+const initialIngredientsState: IngredientsState = {
   isInit: false,
   isLoading: false,
   ingredients: [],
-  orders: [],
-  total: 0,
-  totalToday: 0,
   error: null,
 };
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState: initialAppState,
+  initialState: initialIngredientsState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getIngredientsThunk.pending, (state) => {
@@ -83,14 +73,10 @@ export const ingredientsSlice = createSlice({
 //#region Constructor
 export type ConstructorState = {
   constructorItems: TConstructorState;
-  orderRequest: boolean;
-  orderModalData: TOrder | null;
 };
 
 const initialConstructorState: ConstructorState = {
   constructorItems: { bun: null, ingredients: [] },
-  orderRequest: false,
-  orderModalData: null,
 };
 
 export const constructorSlice = createSlice({
@@ -131,6 +117,63 @@ export const constructorSlice = createSlice({
         ...state.constructorItems.ingredients.slice(index + 2),
       ];
     },
+    resetConstructor: (state) => {
+      state.constructorItems = { bun: null, ingredients: [] };
+    },
+  },
+});
+//#endregion
+
+//#region Orders
+type OrdersState = {
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+  error: SerializedError | null;
+  orderRequest: boolean;
+  orderModalData: TOrder | null;
+};
+
+const initialOrdersState: OrdersState = {
+  orders: [],
+  total: 0,
+  totalToday: 0,
+  error: null,
+  orderRequest: false,
+  orderModalData: null,
+};
+
+export const getFeedsApiThunk = createAsyncThunk('ingredients/getFeeds', () =>
+  getFeedsApi()
+);
+
+export const orderBurgerThunk = createAsyncThunk(
+  'orders/create',
+  (ingredients: TConstructorIngredient[]) => {
+    const data = ingredients.map((i) => i._id);
+    return orderBurgerApi(data);
+  }
+);
+
+export const ordersSlice = createSlice({
+  name: 'orders',
+  initialState: initialOrdersState,
+  reducers: {
+    clearOrderModal: (state) => {
+      state.orderModalData = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(orderBurgerThunk.pending, (state) => {
+      state.orderRequest = true;
+    });
+    builder.addCase(orderBurgerThunk.rejected, (state) => {
+      state.orderRequest = false;
+    });
+    builder.addCase(orderBurgerThunk.fulfilled, (state, { payload }) => {
+      state.orderRequest = false;
+      state.orderModalData = payload.order;
+    });
   },
 });
 //#endregion
@@ -143,7 +186,7 @@ export type SecureState = {
 
 const secureInitialState: SecureState = {
   user: { name: 'uuu', email: 'sdfsdf@dsdfsdf.ttt' },
-  isInit: false,
+  isInit: true,
 };
 
 export const secureSlice = createSlice({
@@ -157,7 +200,15 @@ export const rootReducer = combineReducers({
   ingredients: ingredientsSlice.reducer,
   secure: secureSlice.reducer,
   burgerConstructor: constructorSlice.reducer,
+  orders: ordersSlice.reducer,
 });
 
-export const { addIngredient, removeIngredient, upIngredient, downIngredient } =
-  constructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  upIngredient,
+  downIngredient,
+  resetConstructor,
+} = constructorSlice.actions;
+
+export const { clearOrderModal } = ordersSlice.actions;
