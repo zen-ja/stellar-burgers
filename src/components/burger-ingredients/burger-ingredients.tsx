@@ -11,7 +11,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
   const { ingredients } = useSelector((store: RootState) => store.ingredients);
-  // TODO: Взять ингредиенты из стора
+  // TODO: +Взять ингредиенты из стора
 
   const [bunsRef, inViewBuns] = useInView({
     threshold: 0,
