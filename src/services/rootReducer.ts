@@ -9,7 +9,7 @@ import {
   type TLoginData,
   type TRegisterData,
 } from '@/utils/burger-api';
-import { setCookie } from '@/utils/cookie';
+import { deleteCookie, setCookie } from '@/utils/cookie';
 import {
   combineReducers,
   createAsyncThunk,
@@ -261,7 +261,14 @@ export const updateUserApiThunk = createAsyncThunk(
 
 export const logoutApiThunk = createAsyncThunk(
   'secure/logoutUser',
-  (): Promise<boolean> => logoutApi().then(({ success }) => success)
+  (): Promise<boolean> =>
+    logoutApi().then(({ success }) => {
+      if (success) {
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
+      }
+      return success;
+    })
 );
 
 export const secureSlice = createSlice({
