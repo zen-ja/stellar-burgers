@@ -1,13 +1,12 @@
+import { updateUserApiThunk } from '@/services/rootReducer';
+import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
-  /** TODO: Взять переменную из стора */
-  const user = {
-    name: '',
-    email: '',
-  };
-
+  /** TODO: +Взять переменную из стора */
+  const { user } = useSelector((store: RootState) => store.secure);
+  const dispatch = useDispatch();
   const [formValue, setFormValue] = useState({
     name: user.name,
     email: user.email,
@@ -29,6 +28,9 @@ export const Profile = (): React.JSX.Element => {
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
+    void dispatch(
+      updateUserApiThunk({ email: formValue.email, password: formValue.password })
+    );
   };
 
   const handleCancel = (e: SyntheticEvent): void => {

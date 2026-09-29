@@ -26,7 +26,7 @@ export const AppHeaderUI = ({ userName }: TAppHeaderUIProps): React.JSX.Element 
       <div className={styles.logo}>
         <Logo className="" />
       </div>
-      <NavLink className={styles.link} to={'/login'}>
+      <NavLink className={styles.link} to={!userName ? '/login' : '/profile'}>
         <ProfileIcon type={'primary'} />
         <p className="text text_type_main-default ml-2">
           {userName ?? 'Личный кабинет'}

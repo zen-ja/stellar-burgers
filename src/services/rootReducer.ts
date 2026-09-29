@@ -1,4 +1,14 @@
-import { getFeedsApi, getIngredientsApi, orderBurgerApi } from '@/utils/burger-api';
+import {
+  getFeedsApi,
+  getIngredientsApi,
+  loginUserApi,
+  orderBurgerApi,
+  registerUserApi,
+  updateUserApi,
+  type TLoginData,
+  type TRegisterData,
+} from '@/utils/burger-api';
+import { setCookie } from '@/utils/cookie';
 import {
   combineReducers,
   createAsyncThunk,
@@ -205,18 +215,92 @@ export const ordersSlice = createSlice({
 //#region Secure
 export type SecureState = {
   user: TUser;
-  isInit: boolean;
+  onlyUnAuth: boolean;
+  isAuthChecked: boolean;
+  isLoading: boolean;
+  error: SerializedError | null;
 };
 
 const secureInitialState: SecureState = {
-  user: { name: 'uuu', email: 'sdfsdf@dsdfsdf.ttt' },
-  isInit: true,
+  user: { name: '', email: '' },
+  onlyUnAuth: false,
+  isAuthChecked: false,
+  isLoading: false,
+  error: null,
 };
+
+export const registerUserApiThunk = createAsyncThunk(
+  'secure/registerUser',
+  (data: TRegisterData): Promise<TUser> =>
+    registerUserApi(data).then(({ refreshToken, accessToken, user }) => {
+      localStorage.setItem('refreshToken', refreshToken);
+      setCookie('accessToken', accessToken);
+      return user;
+    })
+);
+
+export const loginUserApiThunk = createAsyncThunk(
+  'secure/loginUser',
+  (data: TLoginData): Promise<TUser> =>
+    loginUserApi(data).then(({ refreshToken, accessToken, user }) => {
+      localStorage.setItem('refreshToken', refreshToken);
+      setCookie('accessToken', accessToken);
+      return user;
+    })
+);
+
+export const updateUserApiThunk = createAsyncThunk(
+  'secure/updateUser',
+  (data: TLoginData): Promise<TUser> => updateUserApi(data).then(({ user }) => user)
+);
 
 export const secureSlice = createSlice({
   name: 'secure',
   initialState: secureInitialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(registerUserApiThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(registerUserApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(registerUserApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.user = payload;
+    });
+
+    builder.addCase(loginUserApiThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(loginUserApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(loginUserApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.user = payload;
+    });
+
+    builder.addCase(updateUserApiThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(updateUserApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(updateUserApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.user = payload;
+    });
+  },
 });
 //#endregion
 
