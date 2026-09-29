@@ -6,7 +6,6 @@ export const IngredientDetails = (): React.JSX.Element => {
   // TODO: +Взять переменную из стора
   const { ingredients } = useSelector((store: RootState) => store.ingredients);
   const { id } = useParams();
-  console.log(id);
   const ingredientData = ingredients.find((i) => i._id === id) ?? null;
 
   if (!ingredientData) {

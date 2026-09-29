@@ -19,7 +19,6 @@ import {
   ResetPassword,
 } from '@pages';
 import { Preloader } from '@ui';
-// import type { TIngredient } from '@utils-types';
 import { useEffect } from 'react';
 import {
   Routes,
@@ -29,7 +28,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-//import { ProtectedRoute } from '@components';
 import type { AppContentProps } from './type';
 
 import '../../index.css';
@@ -190,7 +188,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/feed/:number"
           element={
-            <Modal title="oo" onClose={closeModal}>
+            <Modal title="#" onClose={closeModal}>
               <OrderInfo />
             </Modal>
           }

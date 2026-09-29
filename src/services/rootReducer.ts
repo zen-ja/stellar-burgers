@@ -51,21 +51,48 @@ export const ingredientsSlice = createSlice({
       state.isLoading = false;
       state.ingredients = payload;
     });
+  },
+});
+//#endregion
 
-    // builder.addCase(getFeedsApiThunk.pending, (state) => {
-    //   state.ordersLoading = true;
-    //   state.ordersError = null;
-    // });
-    // builder.addCase(getFeedsApiThunk.rejected, (state, { error }) => {
-    //   state.ordersLoading = false;
-    //   state.ordersError = error;
-    // });
-    // builder.addCase(getFeedsApiThunk.fulfilled, (state, { payload }) => {
-    //   state.ordersLoading = false;
-    //   state.orders = payload.orders;
-    //   state.total = payload.total;
-    //   state.totalToday = payload.totalToday;
-    // });
+//#region Feeds
+export type FeedsState = {
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+  error: SerializedError | null;
+  isLoading: boolean;
+};
+
+export const getFeedsApiThunk = createAsyncThunk('feeds/getFeeds', () => getFeedsApi());
+
+const initialFeedsState: FeedsState = {
+  orders: [],
+  total: 0,
+  totalToday: 0,
+  error: null,
+  isLoading: false,
+};
+
+export const feedsSlice = createSlice({
+  name: 'feeds',
+  initialState: initialFeedsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getFeedsApiThunk.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getFeedsApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(getFeedsApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.orders = payload.orders;
+      state.total = payload.total;
+      state.totalToday = payload.totalToday;
+    });
   },
 });
 //#endregion
@@ -143,10 +170,6 @@ const initialOrdersState: OrdersState = {
   orderModalData: null,
 };
 
-export const getFeedsApiThunk = createAsyncThunk('ingredients/getFeeds', () =>
-  getFeedsApi()
-);
-
 export const orderBurgerThunk = createAsyncThunk(
   'orders/create',
   (ingredients: TConstructorIngredient[]) => {
@@ -167,8 +190,9 @@ export const ordersSlice = createSlice({
     builder.addCase(orderBurgerThunk.pending, (state) => {
       state.orderRequest = true;
     });
-    builder.addCase(orderBurgerThunk.rejected, (state) => {
+    builder.addCase(orderBurgerThunk.rejected, (state, { error }) => {
       state.orderRequest = false;
+      state.error = error;
     });
     builder.addCase(orderBurgerThunk.fulfilled, (state, { payload }) => {
       state.orderRequest = false;
@@ -201,6 +225,7 @@ export const rootReducer = combineReducers({
   secure: secureSlice.reducer,
   burgerConstructor: constructorSlice.reducer,
   orders: ordersSlice.reducer,
+  feeds: feedsSlice.reducer,
 });
 
 export const {
