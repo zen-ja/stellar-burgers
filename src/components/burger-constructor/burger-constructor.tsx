@@ -22,7 +22,7 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
   const onOrderClick = (): void => {
     if (!constructorItems.bun || orderRequest) return;
     // TODO: +Оформить заказ
-    void dispatch(orderBurgerThunk(constructorItems.ingredients));
+    void dispatch(orderBurgerThunk(constructorItems));
   };
 
   const closeOrderModal = (): void => {

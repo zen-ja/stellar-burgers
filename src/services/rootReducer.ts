@@ -183,8 +183,12 @@ const initialOrdersState: OrdersState = {
 
 export const orderBurgerThunk = createAsyncThunk(
   'orders/create',
-  (ingredients: TConstructorIngredient[]) => {
-    const data = ingredients.map((i) => i._id);
+  (constructorItems: TConstructorState) => {
+    const data = [
+      constructorItems.bun?._id,
+      ...constructorItems.ingredients.map((i) => i._id),
+      constructorItems.bun?._id,
+    ].filter((id): id is string => Boolean(id));
     return orderBurgerApi(data);
   }
 );
