@@ -160,11 +160,11 @@ const RouteComponent = (): React.JSX.Element => {
           path="/profile/orders/:number"
           element={
             <ProtectedRoute>
-              <ProfileOrders />
+              <OrderInfo />
             </ProtectedRoute>
           }
         />
-        <Route path="/feed/:number" element={<Feed />} />
+        <Route path="/feed/:number" element={<OrderInfo />} />
         <Route
           path="/ingredients/:id"
           element={
@@ -183,17 +183,16 @@ const RouteComponent = (): React.JSX.Element => {
           }
         />
       </Routes>
-
-      <Routes>
-        <Route
-          path="/feed/:number"
-          element={
-            <Modal title="#" onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        {background && (
+      {background && (
+        <Routes>
+          <Route
+            path="/feed/:number"
+            element={
+              <Modal title="#" onClose={closeModal}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
           <Route
             path="/ingredients/:id"
             element={
@@ -202,18 +201,18 @@ const RouteComponent = (): React.JSX.Element => {
               </Modal>
             }
           />
-        )}
-        <Route
-          path="/profile/orders/:number"
-          element={
-            <ProtectedRoute>
-              <Modal title="oo" onClose={closeModal}>
-                <OrderInfo />
-              </Modal>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/profile/orders/:number"
+            element={
+              <ProtectedRoute>
+                <Modal title="oo" onClose={closeModal}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 };
