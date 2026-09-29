@@ -159,7 +159,15 @@ const RouteComponent = (): React.JSX.Element => {
           }
         />
         <Route path="/feed/:number" element={<Feed />} />
-        <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        <Route
+          path="/ingredients/:id"
+          element={
+            <div className={(styles.detailHeader, styles.message)}>
+              <h1 className="text_type_main-large">Детали ингредиента</h1>
+              <IngredientDetails />
+            </div>
+          }
+        />
         <Route
           path="/profile/orders/:number"
           element={
@@ -168,7 +176,14 @@ const RouteComponent = (): React.JSX.Element => {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<NotFound404 />} />
+        <Route
+          path="*"
+          element={
+            <div className={(styles.detailHeader, styles.message)}>
+              <NotFound404 />
+            </div>
+          }
+        />
       </Routes>
 
       <Routes>
