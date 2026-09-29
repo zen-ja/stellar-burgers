@@ -6,6 +6,7 @@ import {
 import { useSelector, useDispatch, type RootState } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import type { TConstructorIngredient } from '@utils-types';
 
@@ -18,8 +19,15 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
     (store: RootState) => store.burgerConstructor
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useSelector((store: RootState) => store.secure);
 
   const onOrderClick = (): void => {
+    if (!user) {
+      void navigate('/login', { state: { from: location } });
+      return;
+    }
     if (!constructorItems.bun || orderRequest) return;
     // TODO: +Оформить заказ
     void dispatch(orderBurgerThunk(constructorItems));
