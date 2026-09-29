@@ -10,7 +10,7 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({
-  onlyUnAuth = false,
+  onlyUnAuth,
   children,
 }: ProtectedRouteProps): React.JSX.Element => {
   const { isLoading } = useSelector((store: RootState) => store.secure);

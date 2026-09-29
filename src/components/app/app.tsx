@@ -111,7 +111,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/login"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <Login />
             </ProtectedRoute>
           }
@@ -119,7 +119,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/register"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <Register />
             </ProtectedRoute>
           }
@@ -156,6 +156,14 @@ const RouteComponent = (): React.JSX.Element => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile/orders/:number"
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/feed/:number" element={<Feed />} />
         <Route
           path="/ingredients/:id"
@@ -164,14 +172,6 @@ const RouteComponent = (): React.JSX.Element => {
               <h1 className="text_type_main-large">Детали ингредиента</h1>
               <IngredientDetails />
             </div>
-          }
-        />
-        <Route
-          path="/profile/orders/:number"
-          element={
-            <ProtectedRoute>
-              <ProfileOrders />
-            </ProtectedRoute>
           }
         />
         <Route

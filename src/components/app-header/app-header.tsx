@@ -5,5 +5,5 @@ export const AppHeader = (): React.JSX.Element => {
   /* TODO: +Получите имя пользователя из хранилища */
   const { user } = useSelector((store: RootState) => store.secure);
 
-  return <AppHeaderUI userName={user.name} />;
+  return <AppHeaderUI userName={user?.name} />;
 };

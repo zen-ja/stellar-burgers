@@ -2,6 +2,7 @@ import {
   getFeedsApi,
   getIngredientsApi,
   loginUserApi,
+  logoutApi,
   orderBurgerApi,
   registerUserApi,
   updateUserApi,
@@ -214,7 +215,7 @@ export const ordersSlice = createSlice({
 
 //#region Secure
 export type SecureState = {
-  user: TUser;
+  user: TUser | null;
   onlyUnAuth: boolean;
   isAuthChecked: boolean;
   isLoading: boolean;
@@ -222,7 +223,7 @@ export type SecureState = {
 };
 
 const secureInitialState: SecureState = {
-  user: { name: '', email: '' },
+  user: null,
   onlyUnAuth: false,
   isAuthChecked: false,
   isLoading: false,
@@ -252,6 +253,11 @@ export const loginUserApiThunk = createAsyncThunk(
 export const updateUserApiThunk = createAsyncThunk(
   'secure/updateUser',
   (data: TLoginData): Promise<TUser> => updateUserApi(data).then(({ user }) => user)
+);
+
+export const logoutApiThunk = createAsyncThunk(
+  'secure/logoutUser',
+  (): Promise<boolean> => logoutApi().then(({ success }) => success)
 );
 
 export const secureSlice = createSlice({
@@ -299,6 +305,22 @@ export const secureSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.user = payload;
+    });
+
+    builder.addCase(logoutApiThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(logoutApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(logoutApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      if (payload) {
+        state.user = null;
+      }
     });
   },
 });
