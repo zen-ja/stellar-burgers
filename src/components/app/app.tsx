@@ -127,7 +127,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/forgot-password"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -135,7 +135,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/reset-password"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <ResetPassword />
             </ProtectedRoute>
           }
