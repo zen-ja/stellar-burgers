@@ -32,7 +32,9 @@ export const ProtectedRoute = ({
     // при обратном редиректе  получаем данные о месте назначения редиректа из объекта location.state
     // в случае если объекта location.state?.from нет — а такое может быть , если мы зашли на страницу логина по прямому URL
     // мы сами создаём объект c указанием адреса и делаем переадресацию на главную страницу
-    const from = location.state?.from ?? { pathname: '/' };
+    const from = (location.state as { from?: { pathname: string } } | null)?.from ?? {
+      pathname: '/',
+    };
 
     return <Navigate replace to={from} />;
   }
