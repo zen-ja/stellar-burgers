@@ -1,6 +1,8 @@
 import {
   getFeedsApi,
   getIngredientsApi,
+  getOrderByNumberApi,
+  getOrdersApi,
   loginUserApi,
   logoutApi,
   orderBurgerApi,
@@ -193,6 +195,19 @@ export const orderBurgerThunk = createAsyncThunk(
   }
 );
 
+export const getOrdersApiThunk = createAsyncThunk('orders/getAll', async () => {
+  const orders = await getOrdersApi();
+  return orders;
+});
+
+export const getOrderByNumberApiThunk = createAsyncThunk(
+  'orders/getByNumber',
+  async (number: number) => {
+    const order = await getOrderByNumberApi(number);
+    return order;
+  }
+);
+
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState: initialOrdersState,
@@ -212,6 +227,31 @@ export const ordersSlice = createSlice({
     builder.addCase(orderBurgerThunk.fulfilled, (state, { payload }) => {
       state.orderRequest = false;
       state.orderModalData = payload.order;
+    });
+
+    builder.addCase(getOrdersApiThunk.pending, (state) => {
+      state.orderRequest = false;
+    });
+    builder.addCase(getOrdersApiThunk.rejected, (state, { error }) => {
+      state.orderRequest = false;
+      state.error = error;
+    });
+    builder.addCase(getOrdersApiThunk.fulfilled, (state, { payload }) => {
+      state.orderRequest = false;
+      state.orders = payload;
+    });
+
+    builder.addCase(getOrderByNumberApiThunk.pending, (state) => {
+      state.orderRequest = false;
+    });
+    builder.addCase(getOrderByNumberApiThunk.rejected, (state, { error }) => {
+      state.orderRequest = false;
+      state.error = error;
+    });
+    builder.addCase(getOrderByNumberApiThunk.fulfilled, (state, { payload }) => {
+      state.orderRequest = false;
+      if (payload.success) state.orderModalData = payload.orders[0];
+      else state.orderModalData = null;
     });
   },
 });
