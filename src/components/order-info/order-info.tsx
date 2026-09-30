@@ -1,17 +1,29 @@
-import { useSelector, type RootState } from '@/services/store';
+import { getOrderByNumberApiThunk } from '@/services/rootReducer';
+import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { Preloader, OrderInfoUI } from '@ui';
-import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
   /** TODO: взять переменные orderData и ingredients из стора */
-
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const isFeeds = location.pathname.includes('/feed');
+  const orders = useSelector((store: RootState) =>
+    isFeeds ? store.feeds.orders : store.orders.orders
+  );
+  const orderModalData = useSelector((store: RootState) => store.orders.orderModalData);
   const { ingredients } = useSelector((store: RootState) => store.ingredients);
-  const { orders } = useSelector((store: RootState) => store.feeds);
   const { number } = useParams();
-  const orderData = orders.find((i) => i.number === Number(number));
+  const orderData = orders.find((i) => i.number === Number(number)) ?? orderModalData;
+
+  useEffect(() => {
+    if (!orderData && number) {
+      void dispatch(getOrderByNumberApiThunk(Number(number)));
+    }
+  }, [dispatch, number, orderData]);
 
   /**
    * использование useMemo не обязательно
