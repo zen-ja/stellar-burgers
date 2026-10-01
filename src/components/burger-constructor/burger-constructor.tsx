@@ -35,8 +35,10 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
 
   const closeOrderModal = (): void => {
     // TODO: +Закрыть модальное окно и сбросить заказ
-    dispatch(clearOrderModal());
-    dispatch(resetConstructor());
+    if (!orderRequest) {
+      dispatch(clearOrderModal());
+      dispatch(resetConstructor());
+    }
   };
 
   const price = useMemo(
