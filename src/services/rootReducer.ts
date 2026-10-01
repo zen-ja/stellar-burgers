@@ -3,6 +3,7 @@ import {
   getIngredientsApi,
   getOrderByNumberApi,
   getOrdersApi,
+  getUserApi,
   loginUserApi,
   logoutApi,
   orderBurgerApi,
@@ -274,6 +275,14 @@ const secureInitialState: SecureState = {
   error: null,
 };
 
+export const getUserApiThunk = createAsyncThunk(
+  'secure/getUser',
+  (): Promise<TUser> =>
+    getUserApi().then(({ user }) => {
+      return user;
+    })
+);
+
 export const registerUserApiThunk = createAsyncThunk(
   'secure/registerUser',
   (data: TRegisterData): Promise<TUser> =>
@@ -316,6 +325,20 @@ export const secureSlice = createSlice({
   initialState: secureInitialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getUserApiThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(getUserApiThunk.rejected, (state, { error }) => {
+      state.error = error;
+      state.isLoading = false;
+    });
+    builder.addCase(getUserApiThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.user = payload;
+    });
+
     builder.addCase(registerUserApiThunk.pending, (state) => {
       state.isLoading = true;
       state.error = null;

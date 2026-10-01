@@ -1,4 +1,4 @@
-import { getIngredientsThunk } from '@/services/rootReducer';
+import { getIngredientsThunk, getUserApiThunk } from '@/services/rootReducer';
 import { useSelector, type RootState, useDispatch } from '@/services/store';
 import {
   AppHeader,
@@ -47,6 +47,7 @@ const App = (): React.JSX.Element => {
     if (!isInit) {
       void dispatch(getIngredientsThunk());
     }
+    void dispatch(getUserApiThunk());
   }, [dispatch, isInit]);
 
   return (
