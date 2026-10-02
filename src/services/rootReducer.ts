@@ -277,7 +277,6 @@ export const ordersSlice = createSlice({
 //#region Secure
 export type SecureState = {
   user: TUser | null;
-  onlyUnAuth: boolean;
   isAuthChecked: boolean;
   isLoading: boolean;
   error: SerializedError | null;
@@ -285,7 +284,6 @@ export type SecureState = {
 
 const secureInitialState: SecureState = {
   user: null,
-  onlyUnAuth: false,
   isAuthChecked: false,
   isLoading: false,
   error: null,
