@@ -1,8 +1,4 @@
-import {
-  clearOrderModal,
-  orderBurgerThunk,
-  resetConstructor,
-} from '@/services/rootReducer';
+import { clearOrderModal, orderBurgerThunk } from '@/services/rootReducer';
 import { useSelector, useDispatch, type RootState } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
@@ -37,7 +33,6 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
     // TODO: +Закрыть модальное окно и сбросить заказ
     if (!orderRequest) {
       dispatch(clearOrderModal());
-      dispatch(resetConstructor());
     }
   };
 

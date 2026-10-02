@@ -120,6 +120,18 @@ const initialConstructorState: ConstructorState = {
   constructorItems: { bun: null, ingredients: [] },
 };
 
+export const orderBurgerThunk = createAsyncThunk(
+  'orders/create',
+  (constructorItems: TConstructorState) => {
+    const data = [
+      constructorItems.bun?._id,
+      ...constructorItems.ingredients.map((i) => i._id),
+      constructorItems.bun?._id,
+    ].filter((id): id is string => Boolean(id));
+    return orderBurgerApi(data);
+  }
+);
+
 export const constructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState: initialConstructorState,
@@ -173,9 +185,11 @@ export const constructorSlice = createSlice({
         ...state.constructorItems.ingredients.slice(index + 2),
       ];
     },
-    resetConstructor: (state) => {
+  },
+  extraReducers: (builder) => {
+    builder.addCase(orderBurgerThunk.fulfilled, (state) => {
       state.constructorItems = { bun: null, ingredients: [] };
-    },
+    });
   },
 });
 //#endregion
@@ -198,18 +212,6 @@ const initialOrdersState: OrdersState = {
   orderRequest: false,
   orderModalData: null,
 };
-
-export const orderBurgerThunk = createAsyncThunk(
-  'orders/create',
-  (constructorItems: TConstructorState) => {
-    const data = [
-      constructorItems.bun?._id,
-      ...constructorItems.ingredients.map((i) => i._id),
-      constructorItems.bun?._id,
-    ].filter((id): id is string => Boolean(id));
-    return orderBurgerApi(data);
-  }
-);
 
 export const getOrdersApiThunk = createAsyncThunk('orders/getAll', async () => {
   const orders = await getOrdersApi();
@@ -428,7 +430,7 @@ export const {
   removeIngredient,
   upIngredient,
   downIngredient,
-  resetConstructor,
+  // resetConstructor,
 } = constructorSlice.actions;
 
 export const { clearOrderModal } = ordersSlice.actions;
