@@ -120,18 +120,6 @@ const initialConstructorState: ConstructorState = {
   constructorItems: { bun: null, ingredients: [] },
 };
 
-export const orderBurgerThunk = createAsyncThunk(
-  'orders/create',
-  (constructorItems: TConstructorState) => {
-    const data = [
-      constructorItems.bun?._id,
-      ...constructorItems.ingredients.map((i) => i._id),
-      constructorItems.bun?._id,
-    ].filter((id): id is string => Boolean(id));
-    return orderBurgerApi(data);
-  }
-);
-
 export const constructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState: initialConstructorState,
@@ -185,12 +173,15 @@ export const constructorSlice = createSlice({
         ...state.constructorItems.ingredients.slice(index + 2),
       ];
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(orderBurgerThunk.fulfilled, (state) => {
+    resetConstructor: (state) => {
       state.constructorItems = { bun: null, ingredients: [] };
-    });
+    },
   },
+  // extraReducers: (builder) => {
+  //   builder.addCase(orderBurgerThunk.fulfilled, (state) => {
+  //     state.constructorItems = { bun: null, ingredients: [] };
+  //   });
+  // },
 });
 //#endregion
 
@@ -223,6 +214,20 @@ export const getOrderByNumberApiThunk = createAsyncThunk(
   async (number: number) => {
     const order = await getOrderByNumberApi(number);
     return order;
+  }
+);
+
+export const orderBurgerThunk = createAsyncThunk(
+  'orders/create',
+  async (constructorItems: TConstructorState, { dispatch }) => {
+    const data = [
+      constructorItems.bun?._id,
+      ...constructorItems.ingredients.map((i) => i._id),
+      constructorItems.bun?._id,
+    ].filter((id): id is string => Boolean(id));
+    const result = await orderBurgerApi(data);
+    dispatch(resetConstructor());
+    return result;
   }
 );
 
@@ -343,14 +348,18 @@ export const secureSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUserApiThunk.pending, (state) => {
+      state.isAuthChecked = false;
       state.isLoading = true;
       state.error = null;
     });
     builder.addCase(getUserApiThunk.rejected, (state, { error }) => {
+      state.isAuthChecked = true;
       state.error = error;
       state.isLoading = false;
+      state.user = null;
     });
     builder.addCase(getUserApiThunk.fulfilled, (state, { payload }) => {
+      state.isAuthChecked = true;
       state.isLoading = false;
       state.error = null;
       state.user = payload;
@@ -430,7 +439,7 @@ export const {
   removeIngredient,
   upIngredient,
   downIngredient,
-  // resetConstructor,
+  resetConstructor,
 } = constructorSlice.actions;
 
 export const { clearOrderModal } = ordersSlice.actions;
