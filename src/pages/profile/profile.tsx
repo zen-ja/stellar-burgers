@@ -29,7 +29,11 @@ export const Profile = (): React.JSX.Element => {
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
     void dispatch(
-      updateUserApiThunk({ email: formValue.email, password: formValue.password })
+      updateUserApiThunk({
+        email: formValue.email,
+        password: formValue.password,
+        name: formValue.name,
+      })
     );
   };
 

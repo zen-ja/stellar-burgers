@@ -320,7 +320,7 @@ export const loginUserApiThunk = createAsyncThunk(
 
 export const updateUserApiThunk = createAsyncThunk(
   'secure/updateUser',
-  (data: TLoginData): Promise<TUser> => updateUserApi(data).then(({ user }) => user)
+  (data: TRegisterData): Promise<TUser> => updateUserApi(data).then(({ user }) => user)
 );
 
 export const logoutApiThunk = createAsyncThunk(
