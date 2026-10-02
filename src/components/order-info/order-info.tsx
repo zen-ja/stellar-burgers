@@ -1,4 +1,4 @@
-import { getOrderByNumberApiThunk } from '@/services/rootReducer';
+import { getOrderByNumberApiThunk } from '@/services/orders';
 import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { Preloader, OrderInfoUI } from '@ui';
 import { useEffect, useMemo } from 'react';

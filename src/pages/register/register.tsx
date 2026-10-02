@@ -1,4 +1,4 @@
-import { registerUserApiThunk } from '@/services/rootReducer';
+import { registerUserApiThunk } from '@/services/secure';
 import { useDispatch } from '@/services/store';
 import { RegisterUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';

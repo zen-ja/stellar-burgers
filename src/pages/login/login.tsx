@@ -1,4 +1,4 @@
-import { loginUserApiThunk } from '@/services/rootReducer';
+import { loginUserApiThunk } from '@/services/secure';
 import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { LoginUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';

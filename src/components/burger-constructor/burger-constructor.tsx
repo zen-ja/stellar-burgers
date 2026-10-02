@@ -1,4 +1,5 @@
-import { clearOrderModal, orderBurgerThunk } from '@/services/rootReducer';
+import { orderBurgerThunk } from '@/services/orders';
+import { clearOrderModal } from '@/services/rootReducer';
 import { useSelector, useDispatch, type RootState } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';

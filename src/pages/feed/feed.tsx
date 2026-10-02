@@ -1,4 +1,4 @@
-import { getFeedsApiThunk } from '@/services/rootReducer';
+import { getFeedsApiThunk } from '@/services/feeds';
 import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';

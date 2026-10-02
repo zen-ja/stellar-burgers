@@ -1,4 +1,4 @@
-import { getOrdersApiThunk } from '@/services/rootReducer';
+import { getOrdersApiThunk } from '@/services/orders';
 import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { ProfileOrdersUI } from '@ui-pages';
 import { useEffect } from 'react';

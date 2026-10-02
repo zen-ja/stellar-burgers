@@ -1,4 +1,4 @@
-import { logoutApiThunk } from '@/services/rootReducer';
+import { logoutApiThunk } from '@/services/secure';
 import { useDispatch } from '@/services/store';
 import { ProfileMenuUI } from '@ui';
 import { useLocation } from 'react-router-dom';

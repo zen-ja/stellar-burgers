@@ -1,4 +1,4 @@
-import { updateUserApiThunk } from '@/services/rootReducer';
+import { updateUserApiThunk } from '@/services/secure';
 import { useDispatch, useSelector, type RootState } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';

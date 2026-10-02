@@ -1,4 +1,5 @@
-import { getIngredientsThunk, getUserApiThunk } from '@/services/rootReducer';
+import { getIngredientsThunk } from '@/services/ingredients';
+import { getUserApiThunk } from '@/services/secure';
 import { useSelector, type RootState, useDispatch } from '@/services/store';
 import { AppHeader } from '@components';
 import { useEffect } from 'react';
