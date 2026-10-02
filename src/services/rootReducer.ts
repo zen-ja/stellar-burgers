@@ -204,17 +204,11 @@ const initialOrdersState: OrdersState = {
   orderModalData: null,
 };
 
-export const getOrdersApiThunk = createAsyncThunk('orders/getAll', async () => {
-  const orders = await getOrdersApi();
-  return orders;
-});
+export const getOrdersApiThunk = createAsyncThunk('orders/getAll', getOrdersApi);
 
 export const getOrderByNumberApiThunk = createAsyncThunk(
   'orders/getByNumber',
-  async (number: number) => {
-    const order = await getOrderByNumberApi(number);
-    return order;
-  }
+  getOrderByNumberApi
 );
 
 export const orderBurgerThunk = createAsyncThunk(
