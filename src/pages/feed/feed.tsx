@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 export const Feed = (): React.JSX.Element => {
   // TODO: +Взять переменную из стора
-  const { orders } = useSelector((store: RootState) => store.feeds);
+  const { orders, isLoading } = useSelector((store: RootState) => store.feeds);
   const dispatch = useDispatch();
 
   const handleGetFeeds = (): void => {
@@ -18,9 +18,9 @@ export const Feed = (): React.JSX.Element => {
 
   useEffect(() => {
     void dispatch(getFeedsApiThunk());
-  }, []);
+  }, [dispatch]);
 
-  if (!orders.length) {
+  if (isLoading) {
     return <Preloader />;
   }
 
