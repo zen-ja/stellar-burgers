@@ -1,6 +1,5 @@
 import { useSelector, type RootState } from '@/services/store';
 import { Preloader } from '@ui';
-// import { isAuthCheckedSelector, userDataSelector } from '../services/store/selectors';
 import { useLocation } from 'react-router';
 import { Navigate } from 'react-router-dom';
 
@@ -13,12 +12,11 @@ export const ProtectedRoute = ({
   onlyUnAuth,
   children,
 }: ProtectedRouteProps): React.JSX.Element => {
-  const { isLoading } = useSelector((store: RootState) => store.secure);
-  //const isAuthChecked = useSelector(isAuthCheckedSelector); //  isAuthCheckedSelector — селектор получения состояния загрузки пользователя
+  const { isAuthChecked } = useSelector((store: RootState) => store.secure);
   const { user } = useSelector((store: RootState) => store.secure); //  userDataSelector — селектор получения пользователя из store
   const location = useLocation();
 
-  if (isLoading) {
+  if (!isAuthChecked) {
     return <Preloader />;
   }
 
