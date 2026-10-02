@@ -26,6 +26,7 @@ import {
   type Location,
   useLocation,
   useNavigate,
+  useParams,
 } from 'react-router-dom';
 
 import type { AppContentProps } from './type';
@@ -189,9 +190,9 @@ const RouteComponent = (): React.JSX.Element => {
           <Route
             path="/feed/:number"
             element={
-              <Modal title="#" onClose={closeModal}>
+              <ModalWithNumber onClose={closeModal}>
                 <OrderInfo />
-              </Modal>
+              </ModalWithNumber>
             }
           />
           <Route
@@ -206,14 +207,29 @@ const RouteComponent = (): React.JSX.Element => {
             path="/profile/orders/:number"
             element={
               <ProtectedRoute>
-                <Modal title="oo" onClose={closeModal}>
+                <ModalWithNumber onClose={closeModal}>
                   <OrderInfo />
-                </Modal>
+                </ModalWithNumber>
               </ProtectedRoute>
             }
           />
         </Routes>
       )}
     </>
+  );
+};
+
+const ModalWithNumber = ({
+  onClose,
+  children,
+}: {
+  onClose: () => void;
+  children: React.ReactNode;
+}): React.JSX.Element => {
+  const { number } = useParams();
+  return (
+    <Modal title={`#${number ?? ''}`} onClose={onClose}>
+      {children}
+    </Modal>
   );
 };
