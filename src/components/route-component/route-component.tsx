@@ -120,7 +120,7 @@ export const RouteComponent = (): React.JSX.Element => {
             path="/feed/:number"
             element={
               <ModalWithNumber onClose={closeModal}>
-                <OrderInfo />
+                <OrderInfo showNumber={false} />
               </ModalWithNumber>
             }
           />
@@ -137,7 +137,7 @@ export const RouteComponent = (): React.JSX.Element => {
             element={
               <ProtectedRoute>
                 <ModalWithNumber onClose={closeModal}>
-                  <OrderInfo />
+                  <OrderInfo showNumber={false} />
                 </ModalWithNumber>
               </ProtectedRoute>
             }

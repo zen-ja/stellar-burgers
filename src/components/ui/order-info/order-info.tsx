@@ -11,9 +11,13 @@ import styles from './order-info.module.css';
 
 export const OrderInfoUI = memo(function OrderInfoUI({
   orderInfo,
+  showNumber = true,
 }: OrderInfoUIProps): React.JSX.Element {
   return (
     <div className={styles.wrap}>
+      {showNumber && (
+        <p className="text text_center text_type_digits-default">#{orderInfo.number}</p>
+      )}
       <h3 className={`text text_type_main-medium  pb-3 pt-10 ${styles.header}`}>
         {orderInfo.name}
       </h3>

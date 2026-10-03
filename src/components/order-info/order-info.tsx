@@ -6,7 +6,11 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import type { TIngredient } from '@utils-types';
 
-export const OrderInfo = (): React.JSX.Element => {
+type OrderInfoProps = {
+  showNumber?: boolean;
+};
+
+export const OrderInfo = ({ showNumber = true }: OrderInfoProps): React.JSX.Element => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const dispatch = useDispatch();
   const location = useLocation();
@@ -74,5 +78,5 @@ export const OrderInfo = (): React.JSX.Element => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo} showNumber={showNumber} />;
 };
