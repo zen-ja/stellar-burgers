@@ -13,6 +13,7 @@ type OrdersState = {
   error: SerializedError | null;
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  orderByNumber: TOrder | null;
 };
 
 const initialOrdersState: OrdersState = {
@@ -22,6 +23,7 @@ const initialOrdersState: OrdersState = {
   error: null,
   orderRequest: false,
   orderModalData: null,
+  orderByNumber: null,
 };
 
 export const getOrdersApiThunk = createAsyncThunk('orders/getAll', getOrdersApi);
@@ -56,6 +58,7 @@ export const ordersSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(orderBurgerThunk.pending, (state) => {
       state.orderRequest = true;
+      state.orderModalData = null;
     });
     builder.addCase(orderBurgerThunk.rejected, (state, { error }) => {
       state.orderRequest = false;
@@ -79,16 +82,16 @@ export const ordersSlice = createSlice({
     });
 
     builder.addCase(getOrderByNumberApiThunk.pending, (state) => {
-      state.orderRequest = false;
+      state.error = null;
+      state.orderByNumber = null;
     });
     builder.addCase(getOrderByNumberApiThunk.rejected, (state, { error }) => {
-      state.orderRequest = false;
       state.error = error;
+      state.orderByNumber = null;
     });
     builder.addCase(getOrderByNumberApiThunk.fulfilled, (state, { payload }) => {
-      state.orderRequest = false;
-      if (payload.success) state.orderModalData = payload.orders[0];
-      else state.orderModalData = null;
+      const order = payload.success ? payload.orders[0] : undefined;
+      state.orderByNumber = order ?? null;
     });
   },
 });

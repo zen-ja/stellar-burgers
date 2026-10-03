@@ -14,10 +14,12 @@ export const OrderInfo = (): React.JSX.Element => {
   const orders = useSelector((store: RootState) =>
     isFeeds ? store.feeds.orders : store.orders.orders
   );
-  const orderModalData = useSelector((store: RootState) => store.orders.orderModalData);
+  const orderByNumber = useSelector((store: RootState) => store.orders.orderByNumber);
   const { ingredients } = useSelector((store: RootState) => store.ingredients);
   const { number } = useParams();
-  const orderData = orders.find((i) => i.number === Number(number)) ?? orderModalData;
+  const orderData =
+    orders.find((i) => i.number === Number(number)) ??
+    (orderByNumber?.number === Number(number) ? orderByNumber : undefined);
 
   useEffect(() => {
     if (!orderData && number) {
