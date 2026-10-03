@@ -54,7 +54,7 @@ export const AppHeaderUI = ({ userName }: TAppHeaderUIProps): React.JSX.Element 
             styles.link
           } ${isActive ? styles.link_active : ''}`
         }
-        to={!userName ? '/login' : '/profile'}
+        to={'/profile'}
       >
         {({ isActive }) => (
           <>
