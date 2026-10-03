@@ -1,5 +1,6 @@
 import { orderBurgerThunk } from '@/services/orders';
 import { clearOrderModal } from '@/services/rootReducer';
+import { selectUser } from '@/services/selectors';
 import { useSelector, useDispatch, type RootState } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
@@ -18,7 +19,7 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector((store: RootState) => store.secure);
+  const user = useSelector(selectUser);
 
   const onOrderClick = (): void => {
     if (!user) {

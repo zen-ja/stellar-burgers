@@ -1,11 +1,12 @@
 import { updateUserApiThunk } from '@/services/secure';
-import { useDispatch, useSelector, type RootState } from '@/services/store';
+import { selectUser } from '@/services/selectors';
+import { useDispatch, useSelector } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
   /** TODO: +Взять переменную из стора */
-  const { user } = useSelector((store: RootState) => store.secure);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState({
     name: user?.name ?? '',

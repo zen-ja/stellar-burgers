@@ -1,5 +1,6 @@
 import { loginUserApiThunk } from '@/services/secure';
-import { useDispatch, useSelector, type RootState } from '@/services/store';
+import { selectSecureError } from '@/services/selectors';
+import { useDispatch, useSelector } from '@/services/store';
 import { LoginUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';
 
@@ -7,7 +8,7 @@ export const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const { error } = useSelector((store: RootState) => store.secure);
+  const error = useSelector(selectSecureError);
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();

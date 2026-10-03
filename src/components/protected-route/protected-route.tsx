@@ -1,4 +1,5 @@
-import { useSelector, type RootState } from '@/services/store';
+import { selectIsAuthChecked, selectUser } from '@/services/selectors';
+import { useSelector } from '@/services/store';
 import { Preloader } from '@ui';
 import { useLocation } from 'react-router';
 import { Navigate } from 'react-router-dom';
@@ -12,8 +13,8 @@ export const ProtectedRoute = ({
   onlyUnAuth,
   children,
 }: ProtectedRouteProps): React.JSX.Element => {
-  const { isAuthChecked } = useSelector((store: RootState) => store.secure);
-  const { user } = useSelector((store: RootState) => store.secure); //  userDataSelector — селектор получения пользователя из store
+  const isAuthChecked = useSelector(selectIsAuthChecked);
+  const user = useSelector(selectUser);
   const location = useLocation();
 
   if (!isAuthChecked) {
