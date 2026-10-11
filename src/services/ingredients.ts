@@ -30,9 +30,10 @@ export const ingredientsSlice = createSlice({
     builder.addCase(getIngredientsThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getIngredientsThunk.rejected, (state) => {
+    builder.addCase(getIngredientsThunk.rejected, (state, payload) => {
       state.isInit = true;
       state.isLoading = false;
+      state.error = payload.error;
     });
     builder.addCase(getIngredientsThunk.fulfilled, (state, { payload }) => {
       state.isInit = true;
