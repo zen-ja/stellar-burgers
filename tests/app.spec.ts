@@ -36,3 +36,44 @@ test('открывает страницу конструктора и добав
   await expect(page.getByTestId('constructor-ingredients')).toContainText(mainTitle);
 });
 
+test('открывает модальное окно ингредиента и закрывает по клику на крестик', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const bunTitle = 'Флюоресцентная булка R2-D3';
+  const bun = page
+    .getByTestId('bun-ingredients')
+    .locator('li')
+    .filter({ hasText: bunTitle });
+  await bun.getByRole('link').click();
+
+  const modal = page.locator('#modals');
+  await expect(page.getByTestId('modal-overlay')).toBeVisible();
+  await expect(modal.getByRole('heading', { name: 'Детали ингредиента' })).toBeVisible();
+  await expect(modal.getByRole('heading', { name: bunTitle })).toBeVisible();
+  await modal.getByRole('button').click();
+  await expect(page.getByTestId('modal-overlay')).toHaveCount(0);
+});
+
+test('открывает модальное окно ингредиента и закрывает по клику на оверлей', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const bunTitle = 'Флюоресцентная булка R2-D3';
+  const bun = page
+    .getByTestId('bun-ingredients')
+    .locator('li')
+    .filter({ hasText: bunTitle });
+  await bun.getByRole('link').click();
+
+  const modal = page.locator('#modals');
+  await expect(page.getByTestId('modal-overlay')).toBeVisible();
+  await expect(modal.getByRole('heading', { name: 'Детали ингредиента' })).toBeVisible();
+  await expect(modal.getByRole('heading', { name: bunTitle })).toBeVisible();
+
+  await page.getByTestId('modal-overlay').click({ position: { x: 20, y: 20 } });
+  // await page.getByTestId('modal-overlay').click();
+  await expect(page.getByTestId('modal-overlay')).toHaveCount(0);
+});
