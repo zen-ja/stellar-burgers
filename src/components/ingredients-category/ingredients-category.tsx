@@ -10,6 +10,7 @@ export const IngredientsCategory = ({
   titleRef,
   ingredients,
   ref,
+  ...rest
 }: TIngredientsCategoryProps): React.JSX.Element => {
   // TODO: +Взять переменную из стора
   // const burgerConstructor: TConstructorState = {
@@ -39,6 +40,7 @@ export const IngredientsCategory = ({
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      {...rest}
     />
   );
 };

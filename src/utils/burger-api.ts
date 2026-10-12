@@ -1,3 +1,5 @@
+import { mockIngredients } from '@/services/data';
+
 import { setCookie, getCookie } from './cookie';
 
 import type { TIngredient, TOrder, TUser } from './types';
@@ -19,9 +21,9 @@ type TServerResponse<T = unknown> = {
 const toApiError = (payload: unknown): Error => {
   const message =
     typeof payload === 'object' &&
-    payload !== null &&
-    'message' in payload &&
-    typeof (payload as { message: unknown }).message === 'string'
+      payload !== null &&
+      'message' in payload &&
+      typeof (payload as { message: unknown }).message === 'string'
       ? (payload as { message: string }).message
       : 'Не удалось выполнить запрос к серверу';
 
@@ -94,6 +96,10 @@ export const getIngredientsApi = (): Promise<TIngredient[]> =>
       if (data?.success) return data.data;
       return Promise.reject(toApiError(data));
     });
+
+export const getFakeIngredients = (): TIngredient[] => {
+  return mockIngredients;
+};
 
 export const getFeedsApi = (): Promise<TFeedsResponse> =>
   fetch(`${URL}/orders/all`)
