@@ -39,6 +39,14 @@ const config: Config = {
       diagnostics: false,
     }],
   },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/**/*.spec.{ts,tsx}',
+  ],
+  coverageDirectory: 'coverage',
 };
 
 export default config;
