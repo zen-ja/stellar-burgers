@@ -127,24 +127,35 @@ describe('тесты синхронных экшенов для burgerConstructo
       },
     };
 
-    const addAction = addIngredient(mockIngredients[1]);
-    const stateAfterAdd = constructorSlice.reducer(initState, addAction);
-    const addedElement = addAction.payload;
-
-    expect(stateAfterAdd).toEqual({
+    const addActionFirst = addIngredient(mockIngredients[1]);
+    const stateAfterAddFirst = constructorSlice.reducer(initState, addActionFirst);
+    const addedFirstElement = addActionFirst.payload;
+    expect(stateAfterAddFirst).toEqual({
       constructorItems: {
         bun: null,
-        ingredients: [addedElement],
+        ingredients: [addedFirstElement],
+      },
+    });
+    const addActionSecond = addIngredient(mockIngredients[1]);
+    const stateAfterAddSecond = constructorSlice.reducer(
+      stateAfterAddFirst,
+      addActionSecond
+    );
+    const addedSecondElement = addActionSecond.payload;
+    expect(stateAfterAddSecond).toEqual({
+      constructorItems: {
+        bun: null,
+        ingredients: [addedFirstElement, addedSecondElement],
       },
     });
 
-    const removeAction = removeIngredient(addedElement);
-    const stateAfterRemove = constructorSlice.reducer(stateAfterAdd, removeAction);
+    const removeAction = removeIngredient(addedFirstElement);
+    const stateAfterRemove = constructorSlice.reducer(stateAfterAddSecond, removeAction);
 
     expect(stateAfterRemove).toEqual({
       constructorItems: {
         bun: null,
-        ingredients: [],
+        ingredients: [addedSecondElement],
       },
     });
   });
