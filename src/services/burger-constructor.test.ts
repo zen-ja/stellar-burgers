@@ -81,6 +81,7 @@ describe('тесты синхронных экшенов для burgerConstructo
 
     const addAction = addIngredient(mockIngredients[0]);
     const newState = constructorSlice.reducer(initState, addAction);
+    const bun = newState.constructorItems.bun;
 
     expect(newState).toEqual({
       constructorItems: {
@@ -91,6 +92,26 @@ describe('тесты синхронных экшенов для burgerConstructo
         ingredients: [],
       },
     });
+    expect(typeof bun?.id).toBe('string');
+    expect(bun?.id).toBeTruthy();
+  });
+
+  test('добавить две одинаковых котлеты в конструктор', () => {
+    const initState = {
+      ...initialConstructorState,
+      constructorItems: {
+        bun: null,
+        ingredients: [],
+      },
+    };
+
+    const addFirstAction = addIngredient(mockIngredients[1]);
+    const addSecondAction = addIngredient(mockIngredients[1]);
+    const newStateFirst = constructorSlice.reducer(initState, addFirstAction);
+    const newStateSecond = constructorSlice.reducer(newStateFirst, addSecondAction);
+    const [fist, second] = newStateSecond.constructorItems.ingredients;
+
+    expect(fist.id).not.toBe(second.id);
   });
 
   test('добавить котлету в конструктор', () => {
