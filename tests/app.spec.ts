@@ -64,6 +64,33 @@ test.describe('Конструктор бургера с HAR', () => {
     await expect(page.getByTestId('constructor')).not.toContainText('Выберите булки');
   });
 
+  test('удаляет выбранную начинку, сохраняя остальные ингредиенты', async ({ page }) => {
+    const filling = page
+      .getByTestId('mains-ingredients')
+      .locator('li')
+      .filter({ hasText: fillingTitle });
+    const sauce = page
+      .getByTestId('sauces-ingredients')
+      .locator('li')
+      .filter({ hasText: sauceTitle });
+
+    await filling.getByRole('button', { name: 'Добавить' }).click();
+    await filling.getByRole('button', { name: 'Добавить' }).click();
+    await sauce.getByRole('button', { name: 'Добавить' }).click();
+
+    const constructorIngredients = page.getByTestId('constructor-ingredients');
+    const constructorFillings = constructorIngredients
+      .locator('li')
+      .filter({ hasText: fillingTitle });
+
+    await expect(constructorFillings).toHaveCount(2);
+    await constructorFillings.first().locator('.constructor-element__action').click();
+
+    await expect(constructorFillings).toHaveCount(1);
+    await expect(constructorIngredients).toContainText(fillingTitle);
+    await expect(constructorIngredients).toContainText(sauceTitle);
+  });
+
   test('открывает модальное окно ингредиента и закрывает по клику на крестик', async ({
     page,
   }) => {
