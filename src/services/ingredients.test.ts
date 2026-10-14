@@ -52,8 +52,13 @@ describe('тесты асинхронных экшенов для ingredients', 
   });
 
   test('проверка fulfilled', () => {
-    const state = ingredientsSlice.reducer(
+    const prevState = ingredientsSlice.reducer(
       undefined,
+      getIngredientsThunk.pending('requestOne', undefined)
+    );
+    expect(prevState.isLoading).toBe(true);
+    const state = ingredientsSlice.reducer(
+      prevState,
       getIngredientsThunk.fulfilled(mockIngredients, 'requestOne', undefined)
     );
     expect(state.isLoading).toBe(false);
@@ -64,8 +69,13 @@ describe('тесты асинхронных экшенов для ingredients', 
 
   test('проверка rejected', () => {
     const errorObject = new Error('Ингредиенты не загружены');
-    const state = ingredientsSlice.reducer(
+    const prevState = ingredientsSlice.reducer(
       undefined,
+      getIngredientsThunk.pending('requestOne', undefined)
+    );
+    expect(prevState.isLoading).toBe(true);
+    const state = ingredientsSlice.reducer(
+      prevState,
       getIngredientsThunk.rejected(errorObject, 'requestOne')
     );
     expect(state.isLoading).toBe(false);
