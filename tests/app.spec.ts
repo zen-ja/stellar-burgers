@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-const bunTitle = 'Флюоресцентная булка R2-D3';
-const fillingTitle = 'Говяжий метеорит (отбивная)';
-const sauceTitle = 'Соус Spicy-X';
+import { prepareDataFromHar } from './test-utils';
+
+const { bunTitle, fillingTitle, sauceTitle, orderNumber } = prepareDataFromHar();
 
 test.describe('Конструктор бургера с HAR', () => {
   test.beforeEach(async ({ page }) => {
@@ -151,7 +151,7 @@ test.describe('Конструктор бургера с HAR', () => {
 
     const modal = page.locator('#modals');
     await expect(page.getByTestId('modal-overlay')).toBeVisible();
-    await expect(modal.getByTestId('order-number')).toHaveText('12345');
+    await expect(modal.getByTestId('order-number')).toHaveText(orderNumber);
 
     await expect(page.getByTestId('constructor-bun-1')).toHaveCount(0);
     await expect(page.getByTestId('constructor-bun-2')).toHaveCount(0);
