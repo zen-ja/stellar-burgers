@@ -10,7 +10,7 @@ export type ConstructorState = {
   constructorItems: TConstructorState;
 };
 
-const initialConstructorState: ConstructorState = {
+export const initialConstructorState: ConstructorState = {
   constructorItems: { bun: null, ingredients: [] },
 };
 
@@ -41,31 +41,39 @@ export const constructorSlice = createSlice({
       },
     },
     removeIngredient: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
-      state.constructorItems.ingredients = state.constructorItems.ingredients.filter(
-        (i) => i.id !== payload.id
-      );
+      if (payload.type === 'bun') {
+        state.constructorItems.bun = null;
+      } else {
+        state.constructorItems.ingredients = state.constructorItems.ingredients.filter(
+          (i) => i.id !== payload.id
+        );
+      }
     },
     upIngredient: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
       const index = state.constructorItems.ingredients.findIndex(
         (i) => i.id === payload.id
       );
-      state.constructorItems.ingredients = [
-        ...state.constructorItems.ingredients.slice(0, index - 1),
-        state.constructorItems.ingredients[index],
-        state.constructorItems.ingredients[index - 1],
-        ...state.constructorItems.ingredients.slice(index + 1),
-      ];
+      if (index !== 0) {
+        state.constructorItems.ingredients = [
+          ...state.constructorItems.ingredients.slice(0, index - 1),
+          state.constructorItems.ingredients[index],
+          state.constructorItems.ingredients[index - 1],
+          ...state.constructorItems.ingredients.slice(index + 1),
+        ];
+      }
     },
     downIngredient: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
       const index = state.constructorItems.ingredients.findIndex(
         (i) => i.id === payload.id
       );
-      state.constructorItems.ingredients = [
-        ...state.constructorItems.ingredients.slice(0, index),
-        state.constructorItems.ingredients[index + 1],
-        state.constructorItems.ingredients[index],
-        ...state.constructorItems.ingredients.slice(index + 2),
-      ];
+      if (index !== state.constructorItems.ingredients.length - 1) {
+        state.constructorItems.ingredients = [
+          ...state.constructorItems.ingredients.slice(0, index),
+          state.constructorItems.ingredients[index + 1],
+          state.constructorItems.ingredients[index],
+          ...state.constructorItems.ingredients.slice(index + 2),
+        ];
+      }
     },
     resetConstructor: (state) => {
       state.constructorItems = { bun: null, ingredients: [] };

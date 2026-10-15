@@ -1,3 +1,5 @@
+import { mockIngredients } from '@/services/data';
+
 import { setCookie, getCookie } from './cookie';
 
 import type { TIngredient, TOrder, TUser } from './types';
@@ -94,6 +96,10 @@ export const getIngredientsApi = (): Promise<TIngredient[]> =>
       if (data?.success) return data.data;
       return Promise.reject(toApiError(data));
     });
+
+export const getFakeIngredients = (): TIngredient[] => {
+  return mockIngredients;
+};
 
 export const getFeedsApi = (): Promise<TFeedsResponse> =>
   fetch(`${URL}/orders/all`)
